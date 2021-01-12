@@ -2,7 +2,14 @@
   <el-card class="chat-card">
     <template #header><h2>Room : {{ roomId }}</h2></template>
     <div id="chat" style="overflow-y: scroll;">
-      <li v-for="(item, index) in msgList" :key="index">{{item}}</li>
+      <div v-for="(item, index) in msgList" :key="index">
+        <div v-if="item.clientName">
+          <strong >{{item.clientName}} :</strong>
+          {{item.msg}}
+        </div>
+         
+        <strong v-else>{{ item }}</strong>
+      </div>
     </div>
   </el-card>
   <el-card style="margin-top: 1vh">
@@ -42,23 +49,40 @@ export default {
       if (clientNm != this.clientName) {
         this.appendMsg(`${clientNm} is joined !!!`)
       }
+      
+      this.$notify.success({
+        title: 'Success',
+        message: `${clientNm} is joined !!!`
+      })       
     })
 
-    socket.on('new-msg', data => this.appendMsg(`${data.clientName} : ${data.msg}`))
+    // socket.on('new-msg', data => this.appendMsg(`${data.clientName} : ${data.msg}`))
+    socket.on('new-msg', data => {
+      this.appendMsg({clientName: data.clientName, msg: data.msg})
+    })
 
-    socket.on('out-room', name => this.appendMsg(`${name} is disconnect !!!`))
+    // socket.on('out-room', name => this.appendMsg(`${name} is disconnect !!!`))
+    socket.on('out-room', name => {
+      this.appendMsg(`${name} is disconnect !!!`)
+
+      this.$notify.success({
+        title: 'Success',
+        message: `${name} is out !!!`
+      }) 
+    })
 
     this.socket = socket
   },
   methods: {
-    appendMsg(msg) {
+    appendMsg(data) {
       // const msgText = document.createElement('div')
       // msgText.innerText = msg
       // document.getElementById('chat').append(msgText)
-      this.msgList.push(msg)
+      this.msgList.push(data)
     },
     sendMsg() {
-      this.appendMsg(`You : ${this.message}`)
+      // this.appendMsg(`You : ${this.message}`)
+      this.appendMsg({clientName: 'You', msg: this.message})
       this.socket.emit('send-msg', {roomId: this.roomId, msg: this.message, clientNm: this.clientName})
       this.message = ''
     },
