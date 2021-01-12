@@ -9,21 +9,14 @@
     </el-dialog>
     <div v-if="!nameDialog" id="chat-container" style="text-align: center">
       <h1>Chat Service</h1>
-      <el-button type="primary" plain>Create Room</el-button>
+      <el-button type="primary" plain @click="createRoom">Create Room</el-button>
       <el-button type="success" plain @click="open">Join Room</el-button>
-      <!-- <el-card class="chat-card">
-        <template #header><h2>Room :</h2></template>
-      </el-card>
-      <el-card style="margin-top: 1vh">
-        <el-input style="width: 93%" placeholder="Enter your message " v-model="message"/>
-        <el-button style="margin-left: 1%" type="primary">Send</el-button>
-      </el-card> -->
     </div>
   </div>
 </template>
 
 <script>
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 
 export default {
   name: 'Home',
@@ -36,13 +29,13 @@ export default {
     }
   },
   mounted() {
-    const socket = io('http://localhost:3000')
+    // const socket = io('http://localhost:3000')
     
-    socket.on('a', data => {
-      console.log(data)
-    })
+    // socket.on('abc', data => {
+    //   console.log(data)
+    // })
 
-    this.socket = socket
+    // this.socket = socket
   },
   methods: {
     handleClose () {
@@ -66,9 +59,20 @@ export default {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel'
       }).then(value => {
-        console.log(value)
+        this.transitTo('ChatRoom', {value, clientName: this.clientName})
       })
-    }
+    },
+    createRoom () {
+      const roomId = `${(Math.random() * 100000000).toFixed(0)}`
+      this.transitTo('ChatRoom', {roomId, clientName: this.clientName})
+    },
+    transitTo (name, data) {
+      const param = {
+        name: name,
+        params: data
+      }
+      this.$router.push(param)
+    },    
   }
 }
 </script>
