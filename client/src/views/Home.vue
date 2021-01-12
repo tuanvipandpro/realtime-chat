@@ -16,8 +16,6 @@
 </template>
 
 <script>
-// import { io } from 'socket.io-client'
-
 export default {
   name: 'Home',
   data() {
@@ -27,15 +25,6 @@ export default {
       message: '',
       socket: ''
     }
-  },
-  mounted() {
-    // const socket = io('http://localhost:3000')
-    
-    // socket.on('abc', data => {
-    //   console.log(data)
-    // })
-
-    // this.socket = socket
   },
   methods: {
     handleClose () {
@@ -59,7 +48,7 @@ export default {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel'
       }).then(value => {
-        this.transitTo('ChatRoom', {value, clientName: this.clientName})
+        this.transitTo('ChatRoom', {roomId: value.value, clientName: this.clientName})
       })
     },
     createRoom () {
@@ -76,10 +65,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-  .chat-card {
-    .el-card {
-      height: 88vh;
-    }
-  }
-</style>
