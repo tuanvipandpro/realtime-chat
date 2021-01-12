@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import { io } from 'socket.io-client'
 
 export default {
   name: 'Home',
@@ -31,8 +31,18 @@ export default {
     return {
       nameDialog: true,
       clientName: '',
-      message: ''
+      message: '',
+      socket: ''
     }
+  },
+  mounted() {
+    const socket = io('http://localhost:3000')
+    
+    socket.on('a', data => {
+      console.log(data)
+    })
+
+    this.socket = socket
   },
   methods: {
     handleClose () {

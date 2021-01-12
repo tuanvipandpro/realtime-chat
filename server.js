@@ -3,5 +3,8 @@ const io = require('socket.io')(3000, {
 })
 
 io.on('connection', socket => {
-  console.log('có người kết nối này')
+  console.log('connected')
+
+  let a = socket.adapter.rooms
+  socket.broadcast.emit('a', 'dsdsd')
 })
