@@ -12,18 +12,27 @@
       </div>
     </div>
   </el-card>
-  <el-card style="margin-top: 1vh">
-    <el-input
-      style="width: 93%"
-      placeholder="Enter your message "
-      v-model="message"
-      @keypress="checkEnter"
-    />
-    <el-button style="margin-left: 1%" type="primary" @click="sendMsg">Send</el-button>
+  <el-card style="margin-top: 5px;">
+    <div style="display: flex">
+      <el-input
+        placeholder="Enter your message "
+        v-model="message"
+        @keypress="checkEnter"
+      />
+      <el-popover placement="right" trigger="click">
+          <template #reference>
+              <el-button icon="el-icon-user"></el-button>
+          </template>
+          <emoji-picker id="emoji-picker"></emoji-picker>
+      </el-popover>
+      <el-button style="margin-left: 1%" type="primary" @click="sendMsg">Send</el-button>
+    </div>
   </el-card>
 </template>
 <script>
 import { io } from 'socket.io-client'
+import 'emoji-picker-element'
+
 export default {
   name: 'ChatRoom',
   data() {
@@ -72,6 +81,11 @@ export default {
     })
 
     this.socket = socket
+
+    document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+      // console.log()
+      this.message = `${this.message} ${event.detail.unicode}`
+    })
   },
   methods: {
     appendMsg(data) {
