@@ -31,18 +31,33 @@ app.get('/', (req, res) => {
 })
 
 let users = {}
+let room = []
+
+app.get('/online-user/', (req, res) => {
+  res.status(200).json({status: 200, users})
+})
+
+app.get('/check-room/:id', (req, res) => {
+  res.status(200).json({status: 200, result: room.includes(req.params.id)})
+})
 
 io.on('connect', socket => {
   console.log(`${socket.id} is connected !`)
 
   socket.on('join-room', data => {
-    socket.join(data.roomId)
-    users[socket.id] = {
-      name: data.clientName,
-      roomId: data.roomId
-    }
+    console.log(data)
 
-    socket.to(data.roomId).emit('new-user', data.clientName)
+    if (data.roomId) {
+      room.push(data.roomId)
+
+      socket.join(data.roomId)
+      users[socket.id] = {
+        name: data.clientName,
+        roomId: data.roomId
+      }
+  
+      socket.to(data.roomId).emit('new-user', data.clientName)
+    }
   })
 
   socket.on('send-msg', data => socket.to(data.roomId).emit('new-msg', {clientName: data.clientNm, msg: data.msg}))
