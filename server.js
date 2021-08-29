@@ -1,5 +1,33 @@
-const io = require('socket.io')(3000, {
-    cors: {origin: '*'}
+const path = require('path')
+const express = require('express')
+const app = express()
+const server = require('http').createServer(app)
+
+const port = process.env.PORT || 3000
+require('dotenv').config() 
+const cors = require('cors')
+
+// const {Server} = require('socket.io')
+// const io = new Server(server)
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*'
+  }
+})
+
+app.use(express.static('public'))
+app.use(cors({
+  origin: ['http://localhost:8080', 'https://tuanvipandpro.github.io'],
+  credentials: true
+}))
+
+server.listen(port, () => {
+  console.log(`Server started on port: ${port}`)
+})
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
 let users = {}

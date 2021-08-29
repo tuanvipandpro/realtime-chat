@@ -21,7 +21,7 @@
       />
       <el-popover placement="right" trigger="click">
           <template #reference>
-              <el-button icon="el-icon-user"></el-button>
+              <el-button type="text" icon="el-icon-user"></el-button>
           </template>
           <emoji-picker id="emoji-picker"></emoji-picker>
       </el-popover>
@@ -50,7 +50,7 @@ export default {
 
     this.appendMsg('You joined !!!')
 
-    const socket = io('http://localhost:3000')
+    const socket = io() // io('http://localhost:3000')
 
     socket.emit('join-room', {roomId: this.roomId, clientName: this.clientName})
 
