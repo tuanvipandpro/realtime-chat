@@ -2,25 +2,31 @@ const path = require('path')
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
-
+const mongoose = require('mongoose')
 const port = process.env.PORT || 3000
 require('dotenv').config() 
 const cors = require('cors')
 
-// const {Server} = require('socket.io')
-// const io = new Server(server)
+app.use(express.static('public'))
+app.use(express.json())
+// app.use(express.urlencoded());
+app.use(cors({
+  origin: ['http://localhost:8080', 'https://tuanvipandpro.github.io'],
+  credentials: true
+}))
 
+require('./routes')(app)
 const io = require('socket.io')(server, {
   cors: {
     origin: '*'
   }
 })
 
-app.use(express.static('public'))
-app.use(cors({
-  origin: ['http://localhost:8080', 'https://tuanvipandpro.github.io'],
-  credentials: true
-}))
+mongoose.connect('mongodb+srv://tuanlm:kflfPNABq5edTdqA@cluster0.ykqrm.mongodb.net/travel-app', {useNewUrlParser: true})
+  .then(() => console.log('Connect DB successfully !!!'))
+  .catch(e => console.error('Cannot connect DB !!!'))
+
+
 
 server.listen(port, () => {
   console.log(`Server started on port: ${port}`)
