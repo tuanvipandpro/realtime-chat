@@ -2,8 +2,13 @@ const mongoose  = require('mongoose')
 const Restaurant = require('../model/Restaurant')
 
 module.exports = {
-    getAllRestaurant: (req, res) => {
-        let result = Restaurant.find({}).then(response => {
+    getRestaurant: (req, res) => {
+        let filter = {}
+
+        if (req.query.type) filter['type'] = req.query.type
+        if (req.query.location) filter['location'] = req.query.location
+
+        const result = Restaurant.find(filter).then(response => {
             res.status(200).json(response)
         }).catch(e => {
             console.error(e)

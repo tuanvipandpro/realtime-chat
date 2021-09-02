@@ -17,7 +17,7 @@ const restaurantSchema = new mongoose.Schema({
     required: true,
   },
   avr_price: {
-    type: Number,
+    type: String,
     required: true,
   },
   open_time: {
@@ -29,6 +29,10 @@ const restaurantSchema = new mongoose.Schema({
     required: false,
   },
   type: {
+    type: Number,
+    required: true,
+  },
+  location: {
     type: Number,
     required: true,
   },
