@@ -22,7 +22,7 @@ const io = require('socket.io')(server, {
   }
 })
 
-mongoose.connect('mongodb+srv://tuanlm:kflfPNABq5edTdqA@cluster0.ykqrm.mongodb.net/travel-app', {useNewUrlParser: true})
+mongoose.connect('mongodb+srv://tuanlm:Ngugiduamay123@cluster0.ykqrm.mongodb.net/travel-app', {useNewUrlParser: true})
   .then(() => console.log('Connect DB successfully !!!'))
   .catch(e => console.error('Cannot connect DB !!!'))
 
